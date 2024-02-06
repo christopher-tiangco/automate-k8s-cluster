@@ -4,6 +4,8 @@ resource "ssh_resource" "install_k3s_to_master" {
   private_key = file(var.master_node.private_key)
   timeout     = "10m"
   commands = [
+    "apt update",
+    "apt install curl -y",
     "curl -sfL ${local.k3s.download_url} | INSTALL_K3S_VERSION=${local.k3s.version} sh -s - server --write-kubeconfig-mode 644 --disable=traefik",
     "echo 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml' >> ~/.bashrc"
   ]
@@ -33,6 +35,7 @@ resource "ssh_resource" "install_k3s_to_workers" {
   user        = each.value.user
   private_key = file(var.master_node.private_key)
   commands = [
+    "apt update",
     "apt install curl -y",
     "curl -sfL ${local.k3s.download_url} | INSTALL_K3S_VERSION=${local.k3s.version} K3S_NODE_NAME=${each.value.hostname} K3S_URL=${local.k3s_master_node_url} K3S_TOKEN=${chomp(ssh_resource.export_k3s_master_token.result)} sh -"
   ]
