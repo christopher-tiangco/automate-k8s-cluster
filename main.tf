@@ -1,4 +1,5 @@
 # Uncomment this if using Ubuntu 22.04 at the master node as its default iptables conflict with k3s CoreDNS
+# See https://slack-archive.rancher.com/t/10027691/anyone-else-run-into-issues-with-ubuntu-22-04-and-coredns-dn
 #resource "ssh_resource" "use_legacy_iptables" {
 #  host        = var.master_node.host
 #  user        = var.master_node.user
