@@ -1,4 +1,16 @@
+# Uncomment this if using Ubuntu 22.04 at the master node as its default iptables conflict with k3s CoreDNS
+#resource "ssh_resource" "use_legacy_iptables" {
+#  host        = var.master_node.host
+#  user        = var.master_node.user
+#  private_key = file(var.master_node.private_key)
+#  timeout     = "10m"
+#  commands = [
+#    "sudo update-alternatives --set iptables /usr/sbin/iptables-legacy",
+#  ]
+#}
+
 resource "ssh_resource" "install_k3s_to_master" {
+  # depends_on  = [ssh_resource.use_legacy_iptables] # Uncomment this if using Ubuntu 22.04 (see above)
   host        = var.master_node.host
   user        = var.master_node.user
   private_key = file(var.master_node.private_key)
